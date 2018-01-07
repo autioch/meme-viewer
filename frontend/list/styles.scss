@@ -1,0 +1,41 @@
+@import 'scroll';
+
+.list {
+  overflow: auto;
+  max-width: 30em;
+  position: fixed;
+  top: 0;
+  left: -100%;
+  bottom: 0;
+  background: #111;
+  transition: left 200ms;
+  z-index: 2;
+
+  &.is-expanded {
+    left: 0;
+  }
+}
+
+.list__toggle {
+  position: fixed;
+  z-index: 3;
+  top: 0.5em;
+  left: 0.5em;
+  padding: .25em 0.5em;
+  height: 1.5em;
+  background: #222;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 200ms;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+
+.list__content {
+  margin-top: 3em;
+  height: calc(100% - 3.5em);
+  overflow: auto;
+}

@@ -1,0 +1,9 @@
+{
+  "ignore": [
+    "backend/static",
+    "frontend",
+    "webpack.config.js"
+  ],
+  "verbose": false,
+  "ext": "js"
+}

@@ -1,0 +1,49 @@
+{
+  "name": "image-viewer",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "backend": "node index.js",
+    "backend:watch": "nodemon index.js",
+    "frontend": "webpack --config webpack.config.js --hide-modules -p",
+    "frontend:watch": "webpack --config webpack.config.js --hide-modules --watch",
+    "test": "mocha --reporter=list frontend/**/*.spec.js & exit 0",
+    "test:watch": "mocha --reporter=min --watch frontend/**/*.spec.js & exit 0"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "app-module-path": "^2.2.0",
+    "autoprefixer": "^7.1.1",
+    "babel-core": "^6.24.1",
+    "babel-loader": "^7.0.0",
+    "babel-plugin-transform-react-jsx": "^6.24.1",
+    "babel-preset-es2015": "^6.24.1",
+    "bluebird": "^3.5.0",
+    "body-parser": "^1.17.2",
+    "clean-webpack-plugin": "^0.1.16",
+    "css-loader": "^0.28.4",
+    "eslint-plugin-react": "^7.1.0",
+    "express": "^4.15.3",
+    "extract-text-webpack-plugin": "^1.0.1",
+    "file-loader": "^0.11.2",
+    "html-webpack-plugin": "^2.28.0",
+    "lean-tag": "^1.0.0",
+    "node-sass": "^4.5.3",
+    "nodemon": "^1.11.0",
+    "postcss-loader": "^1.3.3",
+    "preact": "^8.1.0",
+    "qb-log": "^1.0.1",
+    "sass-loader": "^6.0.5",
+    "style-loader": "^0.18.2",
+    "webpack": "^1.15.0",
+    "webpack-livereload-plugin": "^0.11.0"
+  },
+  "devDependencies": {
+    "chai": "^4.0.2",
+    "eslint": "^3.19.0",
+    "eslint-config-qb": "^1.0.0",
+    "mocha": "^3.4.2"
+  }
+}
