@@ -1,11 +1,11 @@
-const { h, Component } = require('preact');
-const ItemView = require('./item/view');
-const getDimensions = require('./getDimensions');
-const prepareImage = require('./prepareImage');
+import React, { Component } from 'react';
+import ItemView from './item/view';
+import getDimensions from './getDimensions';
+import prepareImage from './prepareImage';
 
-require('./styles');
+import './styles.css';
 
-module.exports = class GalleryView extends Component {
+export default class GalleryView extends Component {
   constructor(props) {
     super(props);
 
@@ -84,8 +84,8 @@ module.exports = class GalleryView extends Component {
           key={index}
           removeImage={this.removeImage}
           hideImage={this.hideImage}
-          />)}
+        />)}
       </div>
     );
   }
-};
+}

@@ -1,4 +1,4 @@
-module.exports = function prepareImage(image, gallery) {
+export default function prepareImage(image, gallery) {
   if (image.isPrepared) {
     return;
   }
@@ -24,4 +24,4 @@ module.exports = function prepareImage(image, gallery) {
     image.isPrepared = true;
   };
   tag.src = link;
-};
+}

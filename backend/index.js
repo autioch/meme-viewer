@@ -1,3 +1,5 @@
+require('app-module-path').addPath('.');
+
 const qbLog = require('qb-log')('simple');
 const controllers = require('./controllers');
 const setup = require('./setup');

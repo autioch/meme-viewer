@@ -1,7 +1,8 @@
-const { render, h } = require('preact');
-const AppView = require('./view');
+import { createApp } from 'pipe-and-gauge';
+import actions from './actions';
+import initialState from './initialState';
+import App from './app';
 
-require('./favicon.ico');
-require('./styles');
+const store = createApp(actions, initialState, App, document.getElementById('root'));
 
-render(<AppView />, document.body);
+store.fetchGalleries();

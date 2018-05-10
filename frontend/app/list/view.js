@@ -1,9 +1,9 @@
-const { h, Component } = require('preact');
-const ItemView = require('./item/view');
+import React, { Component } from 'react';
+import ItemView from './item/view';
 
-require('./styles');
+// import './styles.css';
 
-module.exports = class List extends Component {
+export default class List extends Component {
   constructor(props) {
     super(props);
 
@@ -23,11 +23,11 @@ module.exports = class List extends Component {
   render() {
     return (
       <div className={`list${this.state.expanded ? ' is-expanded' : ''}`}>
-        <div className ="list__toggle" onclick={this.toggle}>{'< >'}</div>
+        <div className ="list__toggle" onClick={this.toggle}>{'< >'}</div>
         <div className ="list__content">
           {this.props.list.map((gallery) => <ItemView gallery={gallery} setGallery={this.props.setGallery}/>)}
         </div>
       </div>
     );
   }
-};
+}
