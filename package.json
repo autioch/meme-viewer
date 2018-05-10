@@ -9,7 +9,11 @@
     "frontend": "webpack --config webpack.config.js --hide-modules -p",
     "frontend:watch": "webpack --config webpack.config.js --hide-modules --watch",
     "test": "mocha --reporter=list frontend/**/*.spec.js & exit 0",
-    "test:watch": "mocha --reporter=min --watch frontend/**/*.spec.js & exit 0"
+    "test:watch": "mocha --reporter=min --watch frontend/**/*.spec.js & exit 0",
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
   },
   "author": "",
   "license": "ISC",
@@ -38,7 +42,10 @@
     "sass-loader": "^6.0.5",
     "style-loader": "^0.18.2",
     "webpack": "^1.15.0",
-    "webpack-livereload-plugin": "^0.11.0"
+    "webpack-livereload-plugin": "^0.11.0",
+    "react": "^16.3.2",
+    "react-dom": "^16.3.2",
+    "react-scripts": "1.1.4"
   },
   "devDependencies": {
     "chai": "^4.0.2",
