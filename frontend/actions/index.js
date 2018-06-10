@@ -1,3 +1,5 @@
+import jQuery from 'jquery';
+
 export default {
 
   setState({ data }) {
@@ -5,9 +7,12 @@ export default {
   },
 
   fetchGalleries({ store }) {
-    window
-      .fetch('gallery')
-      .then((result) => result.json())
+    jQuery
+      .ajax({
+        url: 'http://localhost:9090/gallery',
+        type: 'GET',
+        crossDomain: true
+      })
       .then((list) => store.setState({
         list
       }));

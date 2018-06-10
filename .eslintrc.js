@@ -2,6 +2,7 @@ module.exports = {
   extends: 'qb',
   plugins: ['react'],
   parserOptions: {
+    "ecmaVersion": 2017,
     ecmaFeatures: {
       jsx: true
     }

@@ -1,13 +1,10 @@
-const { httpStatus: { OK, SERVER_ERROR } } = require('utils');
-const imageManager = require('backend/managers/image');
+const { httpStatus: { OK } } = require('utils');
+const imageManager = require('./manager');
 
-module.exports = function deleteImage(req, res) {
+module.exports = async function deleteImage(req, res) {
   const { imageId, galleryId } = req.params;
 
-  imageManager
-    .deleteImage(galleryId, imageId)
-    .then(() => res.status(OK).send('File removed'))
-    .catch((err) => res.status(SERVER_ERROR).send({
-      error: `Image not found.\n${err.message}`
-    }));
+  await imageManager.deleteImage(galleryId, imageId);
+
+  res.status(OK).send('File removed');
 };

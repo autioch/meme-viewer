@@ -8,6 +8,13 @@ module.exports = function setup(controllers) {
   qbLog.info('Setting up backend application...');
   const app = express();
 
+  /* Allow CORS */
+  app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+    next();
+  });
+
   /* Server static files */
   app.use(express.static(path.join(__dirname, 'static')));
 

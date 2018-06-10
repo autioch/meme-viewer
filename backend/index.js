@@ -7,4 +7,6 @@ const port = 9090;
 
 const app = setup(controllers);
 
+app.disable('etag');
+
 app.listen(port, () => qbLog.info(`Listening on PORT ${port}`));

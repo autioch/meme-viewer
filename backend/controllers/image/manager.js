@@ -4,16 +4,9 @@ const qbLog = require('qb-log');
 const Bluebird = require('bluebird');
 
 const seenExtensions = [];
-const forbiddenExtensions = [
-	'js',
-	'css',
-	'htm',
-	'html'
-	];
-	
-const hiddenExtensions = [
-	'json'
-];
+const forbiddenExtensions = ['js', 'css', 'htm', 'html'];
+
+const hiddenExtensions = ['json'];
 const KB = 1024;
 const MIN_KB = 7;
 
@@ -53,7 +46,6 @@ function filterImage(galleryFolder, file) {
       }
 
       if (hiddenExtensions.indexOf(extension) > -1) {
-
         return false;
       }
 
@@ -70,7 +62,7 @@ function prepareGallery(galleryFolder) {
         .map((file) => ({
           id: file
         }))
-      );
+    );
 }
 
 module.exports = {

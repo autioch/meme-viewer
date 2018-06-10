@@ -1,16 +1,10 @@
-const { httpStatus: { OK, SERVER_ERROR } } = require('utils');
-const imageManager = require('backend/managers/image');
+const { httpStatus: { OK } } = require('utils');
+const imageManager = require('./manager');
 
-module.exports = function getImage(req, res) {
+module.exports = async function getImage(req, res) {
   const { imageId, galleryId } = req.params;
+  const imageDetails = await imageManager.readImage(galleryId, imageId);
 
-  return imageManager
-    .readImage(galleryId, imageId)
-    .then((imageDetails) => {
-      res.type(imageDetails.extension);
-      res.status(OK).send(imageDetails.imageData);
-    })
-    .catch((err) => res.status(SERVER_ERROR).send({
-      error: `Image not found.\n${err.message}`
-    }));
+  res.type(imageDetails.extension);
+  res.status(OK).send(imageDetails.imageData);
 };

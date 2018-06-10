@@ -7,7 +7,11 @@ function getDirectory() {
     return process.argv[MIN_LENGTH];
   }
 
-  return 'example';
+  return path.join(__dirname, '..', 'data', 'example');
 }
 
-module.exports = path.join(__dirname, '..', 'data', getDirectory());
+const directory = getDirectory();
+
+console.log(directory);
+
+module.exports = directory;
