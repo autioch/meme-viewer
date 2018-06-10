@@ -1,6 +1,5 @@
 import React from 'react';
-
-// import './styles';
+import './styles.css';
 
 export default function View({ image, dimensions, removeImage, hideImage }) {
   return (

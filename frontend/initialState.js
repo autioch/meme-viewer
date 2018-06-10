@@ -1,5 +1,9 @@
 export default {
   selectedId: null,
   list: [],
-  title: ''
+  title: '',
+  imageDimensions: {
+    width: 1,
+    height: 1
+  }
 };

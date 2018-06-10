@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ItemView from './item/view';
-
-// import './styles.css';
+import './styles.css';
+import './scroll.css';
 
 export default class List extends Component {
   constructor(props) {
@@ -25,7 +25,11 @@ export default class List extends Component {
       <div className={`list${this.state.expanded ? ' is-expanded' : ''}`}>
         <div className ="list__toggle" onClick={this.toggle}>{'< >'}</div>
         <div className ="list__content">
-          {this.props.list.map((gallery) => <ItemView gallery={gallery} setGallery={this.props.setGallery}/>)}
+          {this.props.list.map((gallery) => <ItemView
+            key={gallery.id}
+            gallery={gallery}
+            setGallery={this.props.setGallery}
+          />)}
         </div>
       </div>
     );

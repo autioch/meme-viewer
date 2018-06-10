@@ -1,4 +1,6 @@
 import jQuery from 'jquery';
+import parseGalleries from './parseGalleries';
+import getDimensions from './getDimensions';
 
 export default {
 
@@ -14,7 +16,7 @@ export default {
         crossDomain: true
       })
       .then((list) => store.setState({
-        list
+        list: parseGalleries(list)
       }));
   },
 
@@ -23,10 +25,13 @@ export default {
       isSelected: item.id === data
     }));
 
+    const selectedGallery = state.list.find((item) => item.id === data);
+
     return {
       list,
       selectedId: data,
-      title: state.list.find((item) => item.id === data).id
+      title: selectedGallery.id,
+      imageDimensions: getDimensions(selectedGallery.images.length)
     };
   }
 };
