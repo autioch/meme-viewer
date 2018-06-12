@@ -7,8 +7,8 @@ const RATIO = 0.75;
 function getColRow(imageCount, ratio) {
   if (imageCount === 0) {
     return {
-      row: 0,
-      col: 0
+      row: 1,
+      col: 1
     };
   }
 

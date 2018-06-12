@@ -3,14 +3,14 @@ import GalleryView from './gallery/view';
 import ListView from './list/view';
 import './styles.css';
 
-export default ({ store, state: { hideImage, removeImage, list, selectedId } }) => {
+export default ({ store, state: { hideImage, removeImage, list, selectedId, imageDimensions } }) => {
   const gallery = list.find((gal) => gal.id === selectedId);
 
   return (
     <div className="app">
       {gallery ? <GalleryView
         gallery={gallery}
-        dimensions={store.dimensions}
+        imageDimensions={imageDimensions}
         removeImage={removeImage}
         hideImage={hideImage}
       /> : ''}

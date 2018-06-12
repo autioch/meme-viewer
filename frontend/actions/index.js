@@ -1,6 +1,9 @@
 import jQuery from 'jquery';
 import parseGalleries from './parseGalleries';
 import getDimensions from './getDimensions';
+import prepareImage from './prepareImage';
+
+const HOST = 'http://localhost:9090/';
 
 export default {
 
@@ -11,7 +14,7 @@ export default {
   fetchGalleries({ store }) {
     jQuery
       .ajax({
-        url: 'http://localhost:9090/gallery',
+        url: `${HOST}gallery`,
         type: 'GET',
         crossDomain: true
       })
@@ -20,16 +23,64 @@ export default {
       }));
   },
 
-  setGallery({ data, state }) {
-    const list = state.list.map((item) => Object.assign({}, item, {
-      isSelected: item.id === data
-    }));
+  loadGallery({ data: galleryId, store }) {
+    jQuery
+      .ajax({
+        url: `${HOST}image/${galleryId}`,
+        type: 'GET',
+        crossDomain: true
+      })
+      .then((imageList) => store.setGalleryImages({
+        galleryId,
+        imageList: JSON.parse(imageList).map((image) => prepareImage(image, HOST, galleryId))
+      }));
+  },
 
-    const selectedGallery = state.list.find((item) => item.id === data);
+  setGalleryImages({ state, data: { galleryId, imageList } }) {
+    return {
+      imageDimensions: getDimensions(imageList.length),
+      list: state.list.map((item) => {
+        if (item.id !== galleryId) {
+          return item;
+        }
+
+        return {
+          ...item,
+          isLoaded: true,
+          images: imageList
+        };
+      })
+    };
+  },
+
+  setGallery({ data: newId, state, store }) {
+    const oldId = state.selectedId;
+    const list = state.list.map((item) => {
+      if (item.id === oldId) {
+        return {
+          ...item,
+          isSelected: false
+        };
+      }
+      if (item.id === newId) {
+        if (!item.isLoaded) {
+          store.loadGallery(newId);
+        }
+
+        return {
+          ...item,
+          isSelected: true
+        };
+      }
+
+      return item;
+    });
+
+    const selectedGallery = state.list.find((item) => item.id === newId);
 
     return {
       list,
-      selectedId: data,
+      selectedId: selectedGallery.id,
       title: selectedGallery.id,
       imageDimensions: getDimensions(selectedGallery.images.length)
     };
