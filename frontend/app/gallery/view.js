@@ -8,7 +8,10 @@ export default function GalleryView({ gallery, imageDimensions, removeImage, hid
       {gallery.images.map((image) => <ItemView
         key={image.id}
         image={image}
-        hideImage={hideImage}
+        hideImage={() => hideImage({
+          gallery,
+          image
+        })}
         imageDimensions={imageDimensions}
         removeImage={removeImage}
       />)}

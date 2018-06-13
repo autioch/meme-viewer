@@ -53,6 +53,32 @@ export default {
     };
   },
 
+  hideImage({ data, state: { list } }) {
+    const { image, gallery: { id: galleryId } } = data;
+    let imageCount = 0;
+
+    const newList = list.map((item) => {
+      if (item.id !== galleryId) {
+        return item;
+      }
+
+      const newImages = item.images.filter((img) => img.id !== image.id);
+
+      imageCount = newImages.length;
+
+      return {
+        ...item,
+        isLoaded: true,
+        images: newImages
+      };
+    });
+
+    return {
+      imageDimensions: getDimensions(imageCount),
+      list: newList
+    };
+  },
+
   setGallery({ data: newId, state, store }) {
     const oldId = state.selectedId;
     const list = state.list.map((item) => {

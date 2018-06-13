@@ -3,7 +3,7 @@ import GalleryView from './gallery/view';
 import ListView from './list/view';
 import './styles.css';
 
-export default ({ store, state: { hideImage, removeImage, list, selectedId, imageDimensions } }) => {
+export default ({ store, state: { list, selectedId, imageDimensions } }) => {
   const gallery = list.find((gal) => gal.id === selectedId);
 
   return (
@@ -11,8 +11,8 @@ export default ({ store, state: { hideImage, removeImage, list, selectedId, imag
       {gallery ? <GalleryView
         gallery={gallery}
         imageDimensions={imageDimensions}
-        removeImage={removeImage}
-        hideImage={hideImage}
+        removeImage={store.removeImage}
+        hideImage={store.hideImage}
       /> : ''}
       <ListView list={list} setGallery={store.setGallery}/>
     </div>
