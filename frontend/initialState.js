@@ -5,7 +5,5 @@ export default {
     width: 1,
     height: 1
   },
-  imageList: null,
-  isListExpanded: true,
-  title: ''
+  isListExpanded: true
 };

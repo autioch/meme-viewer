@@ -4,22 +4,26 @@ import GalleryView from './gallery/view';
 import ListView from './list/view';
 import './styles.css';
 
-export default ({ store, state: { galleryList, imageDimensions, imageList, isListExpanded, title } }) => (
-  <div className="app">
-    <Helmet>
-      <title>{title}</title>
-    </Helmet>
-    {imageList ? <GalleryView
-      imageList={imageList}
-      imageDimensions={imageDimensions}
-      removeImage={store.removeImage}
-      hideImage={store.hideImage}
-    /> : ''}
-    <ListView
-      galleryList={galleryList}
-      isExpanded={isListExpanded}
-      toggleList={store.toggleList}
-      setGallery={store.setGallery}
-    />
-  </div>
-);
+export default ({ store, state: { galleryId, galleryList, imageDimensions, isListExpanded } }) => {
+  const gallery = galleryList.find((item) => item.id === galleryId);
+
+  return (
+    <div className="app">
+      <Helmet>
+        <title>{gallery.id}</title>
+      </Helmet>
+      {gallery ? <GalleryView
+        gallery={gallery}
+        imageDimensions={imageDimensions}
+        removeImage={store.removeImage}
+        hideImage={store.hideImage}
+      /> : ''}
+      <ListView
+        galleryList={galleryList}
+        isExpanded={isListExpanded}
+        toggleList={store.toggleList}
+        setGallery={store.setGallery}
+      />
+    </div>
+  );
+};
