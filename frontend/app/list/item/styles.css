@@ -1,16 +1,16 @@
-.gallery__link {
+.list-item {
   cursor: pointer;
   padding: .25em .5em;
   text-transform: capitalize;
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;  
+  white-space: nowrap;
 }
 
-.gallery__link:hover {
+.list-item:hover {
   background: #444;
 }
 
-.gallery__link.is-selected {
+.list-item.is-selected {
   background: #333;
 }

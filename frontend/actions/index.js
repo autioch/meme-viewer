@@ -6,34 +6,54 @@ import prepareImage from './prepareImage';
 const HOST = 'http://localhost:9090/';
 
 export default {
-
-  setState({ data }) {
-    return data;
-  },
-
-  fetchGalleries({ store }) {
+  fetchGalleryList({ store }) {
     jQuery
       .ajax({
         url: `${HOST}gallery`,
         type: 'GET',
         crossDomain: true
       })
-      .then((list) => store.setState({
-        list: parseGalleries(list)
-      }));
+      .then((list) => store.setGalleryList(list));
   },
-
-  loadGallery({ data: galleryId, store }) {
+  setGalleryList({ data }) {
+    return {
+      list: parseGalleries(data)
+    };
+  },
+  toggleList({ state: { isListExpanded } }) {
+    return {
+      isListExpanded: !isListExpanded
+    };
+  },
+  setImageDimensions({ state }) {
+    return {
+      imageDimensions: getDimensions(state.imageList.length)
+    };
+  },
+  fetchImageList({ data: galleryId, store }) {
     jQuery
       .ajax({
         url: `${HOST}image/${galleryId}`,
         type: 'GET',
         crossDomain: true
       })
-      .then((imageList) => store.setGalleryImages({
-        galleryId,
-        imageList: JSON.parse(imageList).map((image) => prepareImage(image, HOST, galleryId))
-      }));
+      .then((imageList) => store.setImageList(imageList));
+  },
+  setImageList({ data: imageListJSON, state: { galleryId } }) {
+    const images = JSON.parse(imageListJSON);
+
+    return {
+      imageList: images.map((image) => prepareImage(image, HOST, galleryId))
+    };
+  },
+
+  /* TODO */
+
+  setGallery({ data: galleryId }) {
+    return {
+      title: galleryId,
+      galleryId
+    };
   },
 
   setGalleryImages({ state, data: { galleryId, imageList } }) {
@@ -52,6 +72,37 @@ export default {
       })
     };
   },
+
+  setGallery({ data: newId, state, store }) {
+    const list = state.list.map((item) => {
+      if (item.id !== newId) {
+        return {
+          ...item,
+          isSelected: false
+        };
+      }
+
+      if (!item.isLoaded) {
+        store.loadGallery(newId);
+      }
+
+      return {
+        ...item,
+        isSelected: true
+      };
+    });
+
+    const selectedGallery = state.list.find((item) => item.id === newId);
+
+    return {
+      list,
+      selectedId: selectedGallery.id,
+      title: selectedGallery.id,
+      imageDimensions: getDimensions(selectedGallery.images.length)
+    };
+  },
+
+  // removeImage({ data }) { },
 
   hideImage({ data, state: { list } }) {
     const { image, gallery: { id: galleryId } } = data;
@@ -76,39 +127,6 @@ export default {
     return {
       imageDimensions: getDimensions(imageCount),
       list: newList
-    };
-  },
-
-  setGallery({ data: newId, state, store }) {
-    const oldId = state.selectedId;
-    const list = state.list.map((item) => {
-      if (item.id === oldId) {
-        return {
-          ...item,
-          isSelected: false
-        };
-      }
-      if (item.id === newId) {
-        if (!item.isLoaded) {
-          store.loadGallery(newId);
-        }
-
-        return {
-          ...item,
-          isSelected: true
-        };
-      }
-
-      return item;
-    });
-
-    const selectedGallery = state.list.find((item) => item.id === newId);
-
-    return {
-      list,
-      selectedId: selectedGallery.id,
-      title: selectedGallery.id,
-      imageDimensions: getDimensions(selectedGallery.images.length)
     };
   }
 };

@@ -5,4 +5,4 @@ import App from './app';
 
 const store = createApp(actions, initialState, App, document.getElementById('root'));
 
-store.fetchGalleries();
+store.fetchGalleryList();
