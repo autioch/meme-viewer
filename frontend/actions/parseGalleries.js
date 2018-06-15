@@ -4,13 +4,13 @@ function parseLabel(label) {
 
 export default function parseGalleries(list) {
   return list.map((item) => {
-    const { id, label = id, images = [] } = item;
+    const { id, label = id, imageList = [] } = item;
 
     return {
       id,
       label: parseLabel(label),
-      images,
-      isLoaded: images.length > 0
+      imageList,
+      isLoaded: imageList.length > 0
     };
   });
 }

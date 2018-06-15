@@ -46,4 +46,9 @@
   padding: .25em;
   cursor: pointer;
   text-decoration: none;
+  color: #000;
+}
+
+.gallery-item__remove {
+  display: none !important; /* TODO */
 }

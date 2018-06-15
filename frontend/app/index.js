@@ -10,7 +10,7 @@ export default ({ store, state: { galleryId, galleryList, imageDimensions, isLis
   return (
     <div className="app">
       <Helmet>
-        <title>{gallery.id}</title>
+        <title>{gallery ? gallery.id : 'Meme viewer'}</title>
       </Helmet>
       {gallery ? <GalleryView
         gallery={gallery}
