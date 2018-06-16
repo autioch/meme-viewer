@@ -1,97 +1,108 @@
 const path = require('path');
-const { dataPath, fs } = require('utils');
+const fs = require('fs').promises;
+const dataPath = require('dataPath');
 const qbLog = require('qb-log');
-const Bluebird = require('bluebird');
+const { existsSync } = require('fs');
 
-const seenExtensions = [];
 const forbiddenExtensions = ['js', 'css', 'htm', 'html'];
-
-const hiddenExtensions = ['json'];
+const ignoredExtensions = ['json'];
 const KB = 1024;
 const MIN_KB = 7;
 
-function removeFile(parentDir, fileName) {
+function removeFile(fullPath) {
   try {
-    fs.unlinkAsync(path.join(parentDir, fileName));
+    fs.unlink(fullPath);
   } catch (err) {
     qbLog.error(err.message);
   }
 }
 
-function filterImage(galleryFolder, file) {
-  return fs
-    .statAsync(path.join(galleryFolder, file))
-    .then((stat) => {
-      if (!stat.isFile()) {
-        return false;
-      }
+async function statImage(galleryFolder, fileName) {
+  const fullPath = path.join(galleryFolder, fileName);
+  const stat = await fs.stat(fullPath);
 
-      if (stat.size < KB * MIN_KB) {
-        removeFile(galleryFolder, file);
-
-        return false;
-      }
-
-      const extension = path.extname(file).replace('.', '');
-
-      if (seenExtensions.indexOf(extension) === -1) {
-        seenExtensions.push(extension);
-        qbLog.info('Extensions', seenExtensions);
-      }
-
-      if (forbiddenExtensions.indexOf(extension) > -1) {
-        removeFile(galleryFolder, file);
-
-        return false;
-      }
-
-      if (hiddenExtensions.indexOf(extension) > -1) {
-        return false;
-      }
-
-      return true;
-    });
+  return {
+    stat,
+    fileName,
+    fullPath
+  };
 }
 
-function prepareGallery(galleryFolder) {
-  return fs
-    .readdirAsync(galleryFolder)
-    .then((files) =>
-      Bluebird
-        .filter(files, (file) => filterImage(galleryFolder, file))
-        .map((file) => ({
-          id: file
-        }))
-    );
+function filterImage({ stat, fileName, fullPath }) {
+  if (!stat.isFile()) {
+    return false;
+  }
+  if (stat.size < KB * MIN_KB) {
+    removeFile(fullPath);
+
+    return false;
+  }
+
+  const extension = path.extname(fileName).replace('.', '');
+
+  if (forbiddenExtensions.includes(extension)) {
+    removeFile(fullPath);
+
+    return false;
+  }
+
+  return !ignoredExtensions.includes(extension);
 }
+
+async function prepareGallery(galleryFolder) {
+  const dataItems = await fs.readdir(galleryFolder);
+  const statPromises = dataItems.map((fileName) => statImage(galleryFolder, fileName));
+  const stats = await Promise.all(statPromises);
+  const imagePromises = stats.filter((item) => filterImage(item));
+  const images = await Promise.all(imagePromises);
+
+  return images.map((item) => ({
+    id: item.fileName
+  }));
+}
+
+const galleryCache = {};
 
 module.exports = {
 
   deleteImage(galleryId, imageId) {
     const imagePath = path.join(dataPath, galleryId, imageId);
 
-    return fs.unlinkAsync(imagePath);
+    return fs.unlink(imagePath);
   },
 
-  readImage(galleryId, imageId) {
+  async readImage(galleryId, imageId) {
     const imagePath = path.join(dataPath, galleryId, imageId);
+    const imageData = await fs.readFile(imagePath);
 
-    return fs
-      .readFileAsync(imagePath)
-      .then((imageData) => ({
-        imageData,
-        extension: path.extname(imagePath).replace('.', '')
-      }));
+    return {
+      imageData,
+      extension: path.extname(imagePath).replace('.', '')
+    };
   },
 
-  getGalleryImages(galleryId) {
+  async getImageList(galleryId) {
     const galleryFolder = path.join(dataPath, galleryId);
-    const galleryJson = path.join(dataPath, galleryId, `${galleryId}.json`);
 
-    return fs
-      .statAsync(galleryJson)
-      .then(() => JSON.parse(fs.readFileAsync(galleryJson)))
-      .catch(() => prepareGallery(galleryFolder));
+    if (galleryCache[galleryFolder]) {
+      return galleryCache[galleryFolder];
+    }
+
+    const cachePath = path.join(dataPath, galleryId, `${galleryId}.json`);
+
+    if (existsSync(cachePath)) {
+      const fileContents = await fs.readFile(cachePath, 'utf8');
+
+      return JSON.parse(fileContents);
+    }
+
+    const galleryImages = await prepareGallery(galleryFolder);
+
+    galleryCache[galleryFolder] = galleryImages;
+
+    await fs.writeFile(cachePath, JSON.stringify(galleryImages), 'utf8');
+
+    return galleryImages;
   }
 
 };

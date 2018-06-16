@@ -108,7 +108,7 @@ export default {
 
         return {
           ...gallery,
-          images: gallery.imageList.filter((img) => img.id !== image.id)
+          imageList: gallery.imageList.filter((img) => img.id !== image.id)
         };
       })
     };

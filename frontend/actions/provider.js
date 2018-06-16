@@ -9,6 +9,7 @@ export function fetchGalleryList() {
     crossDomain: true
   });
 }
+
 export function fetchImageList(galleryId) {
   return jQuery.ajax({
     url: `${HOST}image/${galleryId}`,

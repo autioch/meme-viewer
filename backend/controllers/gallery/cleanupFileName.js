@@ -1,32 +1,20 @@
 const path = require('path');
+const dataPath = require('dataPath');
+const fs = require('fs').promises;
+const diacriticsRemovalMap = require('./diacriticsRemovalMap');
 const Bluebird = require('bluebird');
-const { dataPath, fs, normalizeText } = require('utils');
 
-function renameFilename(oldName, newName) {
-  if (oldName === newName) {
+module.exports = function cleanupFileName(fileName) {
+  const newName = diacriticsRemovalMap
+    .reduce((normalized, change) => normalized.replace(change.letters, change.base), fileName.toLowerCase())
+    .replace(/[^\w\s]/gi, '_')
+    .replace(/[^a-z0-9]/gi, '_');
+
+  if (fileName === newName) {
     return Bluebird.resolve(newName);
   }
 
   return fs
-    .renameAsync(path.join(dataPath, oldName), path.join(dataPath, newName))
-    .then(() => newName)
-    .catch((err) => ({
-      id: oldName,
-      newName,
-      message: err.message
-    }));
-}
-
-module.exports = function cleanupFileName(fileName) {
-  const newName = normalizeText(fileName.toLowerCase()).replace(/[^a-z0-9]/gi, '_');
-
-  return renameFilename(fileName, newName)
-    .then(() => ({
-      id: newName
-    }))
-    .catch((err) => ({
-      id: fileName,
-      newName,
-      message: err.message
-    }));
+    .rename(path.join(dataPath, fileName), path.join(dataPath, newName))
+    .then(() => newName);
 };

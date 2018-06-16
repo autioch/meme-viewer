@@ -3,6 +3,7 @@ const HOST = 'http://localhost:9090/';
 function prepareImage(image, url, galleryId) {
   return {
     id: image.id,
+    galleryId,
     label: image.id,
     url: `${url}image/${galleryId}/${image.id}`
   };

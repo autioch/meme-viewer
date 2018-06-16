@@ -1,4 +1,3 @@
-const { httpStatus: { OK } } = require('utils');
 const manager = require('./manager');
 
 module.exports = [{
@@ -8,6 +7,6 @@ module.exports = [{
     const galleryList = await manager.getGalleryList();
 
     res.setHeader('Content-Type', 'text/json');
-    res.status(OK).send(JSON.stringify(galleryList));
+    res.status(200).send(JSON.stringify(galleryList));
   }
 }];

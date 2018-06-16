@@ -1,4 +1,3 @@
-const { httpStatus: { OK } } = require('utils');
 const imageManager = require('./manager');
 
 module.exports = async function deleteImage(req, res) {
@@ -6,5 +5,5 @@ module.exports = async function deleteImage(req, res) {
 
   await imageManager.deleteImage(galleryId, imageId);
 
-  res.status(OK).send('File removed');
+  res.status(200).send('File removed');
 };

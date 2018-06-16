@@ -1,5 +1,5 @@
 const cleanupFileName = require('./cleanupFileName');
-const { dataPath } = require('utils');
+const dataPath = require('dataPath');
 const fs = require('fs').promises;
 const { existsSync } = require('fs');
 const path = require('path');
