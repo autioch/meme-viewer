@@ -7,8 +7,7 @@ function getDirectory() {
     return process.argv[MIN_LENGTH];
   }
 
-  return path.join(__dirname, 'data', 'example');
+  return path.join('d:', 'images');
 }
 
-// module.exports = getDirectory();
-module.exports = path.join('d:', 'images');
+module.exports = getDirectory();
